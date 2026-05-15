@@ -58,7 +58,6 @@ function FadingVideo({ src, className, style }) {
     video.addEventListener('timeupdate', onTimeUpdate);
     video.addEventListener('ended', onEnded);
 
-    // Handle already-cached/loaded video
     if (video.readyState >= 2) onLoadedData();
 
     return () => {

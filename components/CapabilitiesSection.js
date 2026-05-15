@@ -1,3 +1,5 @@
+const { motion, useReducedMotion } = Motion;
+
 const CAP_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_094631_d30ab262-45ee-4b7d-99f3-5d5848c8ef13.mp4';
 
 const CARDS = [
@@ -22,18 +24,17 @@ const CARDS = [
 ];
 
 function CapCard({ card, index }) {
-  const { motion: capMotion, useReducedMotion: capUseReducedMotion } = Motion;
-  const prefersReduced = capUseReducedMotion();
-
+  const prefersReduced = useReducedMotion();
   return (
-    <capMotion.div
+    <motion.div
       initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 40, filter: 'blur(10px)' }}
       whileInView={prefersReduced ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, delay: index * 0.12, ease: 'easeOut' }}
+      transition={{ duration: 0.65, delay: index * 0.12, ease: 'easeOut' }}
     >
       <div className="liquid-glass rounded-[1.25rem] p-6 min-h-[360px] flex flex-col">
-        {/* Top row: icon box + tags */}
+
+        {/* Top row: icon box + pill tags */}
         <div className="flex items-start justify-between gap-4">
           <div className="liquid-glass rounded-[0.75rem] w-11 h-11 flex items-center justify-center flex-shrink-0">
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 text-white">
@@ -42,13 +43,15 @@ function CapCard({ card, index }) {
           </div>
           <div className="flex flex-wrap justify-end gap-1.5 max-w-[70%]">
             {card.tags.map((tag) => (
-              <span key={tag} className="liquid-glass rounded-full px-3 py-1 text-[11px] text-white/90 font-body whitespace-nowrap">
+              <span key={tag}
+                className="liquid-glass rounded-full px-3 py-1 text-[11px] text-white/90 font-body whitespace-nowrap">
                 {tag}
               </span>
             ))}
           </div>
         </div>
 
+        {/* Middle spacer */}
         <div className="flex-1" />
 
         {/* Bottom: title + body */}
@@ -60,18 +63,19 @@ function CapCard({ card, index }) {
             {card.body}
           </p>
         </div>
+
       </div>
-    </capMotion.div>
+    </motion.div>
   );
 }
 
 function CapabilitiesSection() {
-  const { motion: capMotion, useReducedMotion: capUseReducedMotion } = Motion;
-  const prefersReduced = capUseReducedMotion();
+  const prefersReduced = useReducedMotion();
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-black">
-      {/* Background video — full bleed, no 120% scale */}
+
+      {/* Background video — full bleed, no 120% scale, no overlay */}
       <FadingVideo
         src={CAP_VIDEO}
         className="absolute inset-0 w-full h-full object-cover z-0"
@@ -79,18 +83,19 @@ function CapabilitiesSection() {
 
       {/* Content */}
       <div className="relative z-10 px-8 md:px-16 lg:px-20 pt-24 pb-10 flex flex-col min-h-screen">
-        {/* Header */}
+
+        {/* Header — mb-auto pins it to top, cards float to bottom */}
         <div className="mb-auto">
-          <capMotion.p
+          <motion.p
             className="text-sm font-body text-white/80 mb-6"
             initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
             // Capabilities
-          </capMotion.p>
-          <capMotion.h2
+          </motion.p>
+          <motion.h2
             className="font-heading italic text-white text-6xl md:text-7xl lg:text-[6rem] leading-[0.9] tracking-[-3px]"
             initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 24, filter: 'blur(8px)' }}
             whileInView={prefersReduced ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -98,15 +103,16 @@ function CapabilitiesSection() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             Production<br />evolved
-          </capMotion.h2>
+          </motion.h2>
         </div>
 
-        {/* Cards */}
+        {/* Cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
           {CARDS.map((card, i) => (
             <CapCard key={card.title} card={card} index={i} />
           ))}
         </div>
+
       </div>
     </section>
   );
